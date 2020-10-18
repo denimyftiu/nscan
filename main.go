@@ -37,8 +37,8 @@ func scanDomain(domain string, wg *sync.WaitGroup) {
 		panic(err)
 	}
 	defer f.Close()
-	s := "nmap -vv -sV -sC " + domain
-	args := strings.Split(s, " ")
+
+	args := strings.Split("nmap -vv -sV -sC " + domain, " ")
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stdout = f
 

@@ -35,7 +35,7 @@ func scanDomain(domain string, options string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	f, err := os.Create("./nmap/" + domain)
 	if err != nil {
-		panic(err)
+		fmt.Println(err.Error())
 	}
 	defer f.Close()
 
@@ -45,7 +45,7 @@ func scanDomain(domain string, options string, wg *sync.WaitGroup) {
 
 	err = cmd.Run()
 	if err != nil {
-		panic(err)
+		fmt.Println(err.Error())
 	}
 }
 
@@ -59,7 +59,7 @@ func main() {
 	if _, err := os.Stat(path); err != nil {
 		if os.IsNotExist(err) {
 			fmt.Println("File does not exist.")
-            return
+			return
 		}
 	}
 
@@ -68,19 +68,19 @@ func main() {
 	err = os.Chdir(dir)
 	err = os.Mkdir("nmap", 0755)
 	if err != nil {
-        fmt.Println("Directory exists.")
-        return
+		fmt.Println("Directory exists.")
+		return
 	}
 
 	domains, err := getDomains(path)
 	if err != nil {
-        fmt.Println("Can not read file.")
-        return
+		fmt.Println("Can not read file.")
+		return
 	}
 	var wg sync.WaitGroup
 	for _, d := range domains {
 		wg.Add(1)
-		go scanDomain(d, options,  &wg)
+		go scanDomain(d, options, &wg)
 	}
 	wg.Wait()
 }
